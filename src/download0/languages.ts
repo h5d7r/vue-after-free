@@ -16,9 +16,7 @@ export const lang: Record<string, string> = {
   jbBehaviorLapse: 'Lapse',
   theme: 'Theme',
   xToGoBack: 'X to go back',
-  oToGoBack: 'O to go back',
-  sortAlphabetical: 'Sort A-Z',
-  sortReverse: 'Sort Z-A'
+  oToGoBack: 'O to go back'
 }
 
 export let useImageText = false
@@ -29,12 +27,14 @@ if (!detectedLocale) {
   detectedLocale = 'ar'
 }
 
+const normalizedLocale = detectedLocale.toLowerCase().replace('_', '-').split('-')[0]!
+
 log('Detected locale: ' + detectedLocale)
 
-const IMAGE_TEXT_LOCALES = ['ar', 'ja', 'ko', 'zh']
-if (IMAGE_TEXT_LOCALES.includes(detectedLocale)) {
+const IMAGE_TEXT_LOCALES = ['ar', 'de', 'ja', 'ko', 'zh']
+if (IMAGE_TEXT_LOCALES.includes(normalizedLocale)) {
   useImageText = true
-  textImageBase = 'file:///../download0/img/text/' + detectedLocale + '/'
+  textImageBase = 'file:///../download0/img/text/' + normalizedLocale + '/'
 }
 
 switch (detectedLocale) {
@@ -60,8 +60,6 @@ switch (detectedLocale) {
     lang.theme = 'Tema'
     lang.xToGoBack = 'X para volver'
     lang.oToGoBack = 'O para volver'
-    lang.sortAlphabetical = 'Orden Alfabético'
-    lang.sortReverse = 'Orden Inverso'
     break
 
   case 'pt':
@@ -81,8 +79,6 @@ switch (detectedLocale) {
     lang.theme = 'Tema'
     lang.xToGoBack = 'X para voltar'
     lang.oToGoBack = 'O para voltar'
-    lang.sortAlphabetical = 'Ordem Alfabética'
-    lang.sortReverse = 'Ordem Inversa'
     break
 
   case 'fr':
@@ -102,29 +98,30 @@ switch (detectedLocale) {
     lang.theme = 'Thème'
     lang.xToGoBack = 'X pour retourner'
     lang.oToGoBack = 'O pour retourner'
-    lang.sortAlphabetical = 'Ordre Alphabétique'
-    lang.sortReverse = 'Ordre Inverse'
     break
 
   case 'de':
+  case 'de-DE':
+  case 'de-AT':
+  case 'de-CH':
+  case 'de-LI':
+  case 'de-LU':
     // German
     lang.jailbreak = 'Jailbreak'
-    lang.payloadMenu = 'Payload Menu'
+    lang.payloadMenu = 'Payload-Menü'
     lang.config = 'Einstellungen'
     lang.exit = 'Beenden'
     lang.autoLapse = 'Auto Lapse'
     lang.autoPoop = 'Auto Poop'
-    lang.autoClose = 'Auto Schliessen'
+    lang.autoClose = 'Auto schließen'
     lang.music = 'Musik'
-    lang.jbBehavior = 'JB Verhalten'
-    lang.jbBehaviorAuto = 'Auto Erkennen'
+    lang.jbBehavior = 'JB-Verhalten'
+    lang.jbBehaviorAuto = 'Automatisch'
     lang.jbBehaviorNetctrl = 'NetControl'
     lang.jbBehaviorLapse = 'Lapse'
     lang.theme = 'Thema'
-    lang.xToGoBack = 'X für Zurueck'
-    lang.oToGoBack = 'O für Zurueck'
-    lang.sortAlphabetical = 'Alphabetisch'
-    lang.sortReverse = 'Umgekehrte Reihenfolge'
+    lang.xToGoBack = 'X zum Zurückgehen'
+    lang.oToGoBack = 'O zum Zurückgehen'
     break
 
   case 'it':
@@ -144,8 +141,6 @@ switch (detectedLocale) {
     lang.theme = 'Tema'
     lang.xToGoBack = 'X per tornare indietro'
     lang.oToGoBack = 'O per tornare indietro'
-    lang.sortAlphabetical = 'Ordine Alfabetico'
-    lang.sortReverse = 'Ordine Inverso'
     break
 
   case 'nl':
@@ -165,8 +160,6 @@ switch (detectedLocale) {
     lang.theme = 'Thema'
     lang.xToGoBack = 'X om terug te gaan'
     lang.oToGoBack = 'O om terug te gaan'
-    lang.sortAlphabetical = 'Alfabetisch Sorteren'
-    lang.sortReverse = 'Omgekeerd Sorteren'
     break
 
   case 'pl':
@@ -186,8 +179,6 @@ switch (detectedLocale) {
     lang.theme = 'Motyw'
     lang.xToGoBack = 'X aby wrocic'
     lang.oToGoBack = 'O aby wrocic'
-    lang.sortAlphabetical = 'Sortuj Alfabetycznie'
-    lang.sortReverse = 'Sortuj Odwrotnie'
     break
 
   case 'tr':
@@ -207,8 +198,6 @@ switch (detectedLocale) {
     lang.theme = 'Tema'
     lang.xToGoBack = 'Geri gitmek icin X'
     lang.oToGoBack = 'Geri gitmek icin O'
-    lang.sortAlphabetical = 'Alfabetik Sırala'
-    lang.sortReverse = 'Ters Sırala'
     break
 
   case 'ar':
@@ -228,8 +217,6 @@ switch (detectedLocale) {
     lang.theme = 'سمة'
     lang.xToGoBack = 'X للرجوع'
     lang.oToGoBack = 'O للرجوع'
-    lang.sortAlphabetical = 'ترتيب أبجدي'
-    lang.sortReverse = 'ترتيب عكسي'
     break
 
   case 'ja':
@@ -249,8 +236,6 @@ switch (detectedLocale) {
     lang.theme = 'テーマ'
     lang.xToGoBack = 'Xで戻る'
     lang.oToGoBack = 'Oで戻る'
-    lang.sortAlphabetical = 'アルファベット順'
-    lang.sortReverse = '逆順'
     break
 
   case 'ko':
@@ -270,8 +255,6 @@ switch (detectedLocale) {
     lang.theme = '테마'
     lang.xToGoBack = 'X로 뒤로 가기'
     lang.oToGoBack = 'O로 뒤로 가기'
-    lang.sortAlphabetical = '알파벳순'
-    lang.sortReverse = '역순'
     break
 
   case 'zh':
@@ -291,8 +274,6 @@ switch (detectedLocale) {
     lang.theme = '主题'
     lang.xToGoBack = '按 X 返回'
     lang.oToGoBack = '按 O 返回'
-    lang.sortAlphabetical = '按字母排序'
-    lang.sortReverse = '逆序排序'
     break
 
   case 'en':
