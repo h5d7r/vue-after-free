@@ -1,5 +1,6 @@
 import { libc_addr } from 'download0/userland'
-import { lang, useImageText, textImageBase } from 'download0/languages'
+import { lang, useImageText } from 'download0/languages'
+import { createRenderedTextImage, shouldRenderTextAsImage, updateRenderedTextImage } from 'download0/text_renderer'
 import { fn, mem, BigInt } from 'download0/types'
 
 if (typeof libc_addr === 'undefined') {
@@ -8,6 +9,10 @@ if (typeof libc_addr === 'undefined') {
 
 if (typeof lang === 'undefined') {
   include('languages.js')
+}
+
+if (typeof createRenderedTextImage === 'undefined') {
+  include('text_renderer.js')
 }
 
 (function () {
@@ -121,11 +126,11 @@ if (typeof lang === 'undefined') {
 
   let currentButton = 0
   const buttons: Image[] = []
-  const buttonTexts: jsmaf.Text[] = []
+  const buttonTexts: Array<Image | jsmaf.Text> = []
   const buttonMarkers: (Image | null)[] = []
   const buttonOrigPos: { x: number; y: number }[] = []
   const textOrigPos: { x: number; y: number }[] = []
-  const valueTexts: Image[] = []
+  const valueTexts: Array<Image | jsmaf.Text> = []
 
   const normalButtonImg = 'file:///assets/img/button_over_9.png'
   const selectedButtonImg = 'file:///assets/img/button_over_9.png'
@@ -153,13 +158,16 @@ if (typeof lang === 'undefined') {
   })
   jsmaf.root.children.push(logo)
 
-  if (useImageText) {
-    const title = new Image({
-      url: textImageBase + 'config.png',
+  if (useImageText || shouldRenderTextAsImage(lang.config, jsmaf.locale)) {
+    const title = createRenderedTextImage({
+      text: lang.config,
       x: 860,
       y: 100,
       width: 200,
-      height: 60
+      height: 60,
+      fontSize: 34,
+      align: 'center',
+      locale: jsmaf.locale
     })
     jsmaf.root.children.push(title)
   } else {
@@ -204,13 +212,15 @@ if (typeof lang === 'undefined') {
     buttonMarkers.push(null)
 
     let btnText: Image | jsmaf.Text
-    if (useImageText) {
-      btnText = new Image({
-        url: textImageBase + configOption.imgKey + '.png',
+    if (useImageText || shouldRenderTextAsImage(configOption.label, jsmaf.locale)) {
+      btnText = createRenderedTextImage({
+        text: configOption.label,
         x: btnX + 20,
         y: btnY + 15,
         width: 200,
-        height: 50
+        height: 50,
+        fontSize: 26,
+        locale: jsmaf.locale
       })
     } else {
       btnText = new jsmaf.Text()
@@ -235,13 +245,15 @@ if (typeof lang === 'undefined') {
     } else {
       let valueLabel: Image | jsmaf.Text
       if (configOption.key === 'jb_behavior') {
-        if (useImageText) {
-          valueLabel = new Image({
-            url: textImageBase + jbBehaviorImgKeys[currentConfig.jb_behavior] + '.png',
+        if (useImageText || shouldRenderTextAsImage(jbBehaviorLabels[currentConfig.jb_behavior] || jbBehaviorLabels[0]!, jsmaf.locale)) {
+          valueLabel = createRenderedTextImage({
+            text: jbBehaviorLabels[currentConfig.jb_behavior] || jbBehaviorLabels[0]!,
             x: btnX + 230,
             y: btnY + 15,
             width: 150,
-            height: 50
+            height: 50,
+            fontSize: 24,
+            locale: jsmaf.locale
           })
         } else {
           valueLabel = new jsmaf.Text()
@@ -269,13 +281,16 @@ if (typeof lang === 'undefined') {
   }
 
   let backHint: Image | jsmaf.Text
-  if (useImageText) {
-    backHint = new Image({
-      url: textImageBase + (jsmaf.circleIsAdvanceButton ? 'xToGoBack.png' : 'oToGoBack.png'),
+  if (useImageText || shouldRenderTextAsImage(jsmaf.circleIsAdvanceButton ? lang.xToGoBack : lang.oToGoBack, jsmaf.locale)) {
+    backHint = createRenderedTextImage({
+      text: jsmaf.circleIsAdvanceButton ? lang.xToGoBack : lang.oToGoBack,
       x: centerX - 60,
       y: startY + configOptions.length * buttonSpacing + 120,
       width: 150,
-      height: 40
+      height: 40,
+      fontSize: 22,
+      align: 'center',
+      locale: jsmaf.locale
     })
   } else {
     backHint = new jsmaf.Text()
@@ -294,7 +309,7 @@ if (typeof lang === 'undefined') {
     return (1 - Math.cos(t * Math.PI)) / 2
   }
 
-  function animateZoomIn (btn: Image, text: jsmaf.Text, btnOrigX: number, btnOrigY: number, textOrigX: number, textOrigY: number) {
+  function animateZoomIn (btn: Image, text: Image | jsmaf.Text, btnOrigX: number, btnOrigY: number, textOrigX: number, textOrigY: number) {
     if (zoomInInterval) jsmaf.clearInterval(zoomInInterval)
     const btnW = buttonWidth
     const btnH = buttonHeight
@@ -326,7 +341,7 @@ if (typeof lang === 'undefined') {
     }, step)
   }
 
-  function animateZoomOut (btn: Image, text: jsmaf.Text, btnOrigX: number, btnOrigY: number, textOrigX: number, textOrigY: number) {
+  function animateZoomOut (btn: Image, text: Image | jsmaf.Text, btnOrigX: number, btnOrigY: number, textOrigX: number, textOrigY: number) {
     if (zoomOutInterval) jsmaf.clearInterval(zoomOutInterval)
     const btnW = buttonWidth
     const btnH = buttonHeight
@@ -416,16 +431,25 @@ if (typeof lang === 'undefined') {
       valueText.url = value ? 'file:///assets/img/check_small_on.png' : 'file:///assets/img/check_small_off.png'
     } else {
       if (key === 'jb_behavior') {
-        if (useImageText) {
-          (valueText as Image).url = textImageBase + jbBehaviorImgKeys[currentConfig.jb_behavior] + '.png'
+        if (useImageText || shouldRenderTextAsImage(jbBehaviorLabels[currentConfig.jb_behavior] || jbBehaviorLabels[0]!, jsmaf.locale)) {
+          updateRenderedTextImage(valueText as Image, {
+            text: jbBehaviorLabels[currentConfig.jb_behavior] || jbBehaviorLabels[0]!,
+            x: valueText.x,
+            y: valueText.y,
+            width: valueText.width,
+            height: valueText.height,
+            fontSize: 24,
+            locale: jsmaf.locale
+          })
         } else {
           (valueText as jsmaf.Text).text = jbBehaviorLabels[currentConfig.jb_behavior] || jbBehaviorLabels[0]
         }
       } else if (key === 'theme') {
         const themeIndex = availableThemes.indexOf(currentConfig.theme)
-        const displayIndex = themeIndex >= 0 ? themeIndex : 0;
+        const displayIndex = themeIndex >= 0 ? themeIndex : 0
+        const themeLabel = themeLabels[displayIndex] || themeLabels[0] || 'Default'
 
-        (valueText as jsmaf.Text).text = themeLabels[displayIndex] || themeLabels[0]!
+        ;(valueText as jsmaf.Text).text = themeLabel
       }
     }
   }

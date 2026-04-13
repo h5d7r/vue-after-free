@@ -4,6 +4,23 @@ declare function log (message: string): void
 declare function debug (message: string): void
 declare function include (path: string): void
 
+type RenderedTextOptions = {
+  text: string
+  x: number
+  y: number
+  width: number
+  height: number
+  fontSize?: number
+  color?: string
+  align?: 'left' | 'center' | 'right'
+  locale?: string
+}
+
+declare function shouldRenderTextAsImage (text: string, locale?: string): boolean
+declare function buildRenderedTextUrl (options: RenderedTextOptions): string
+declare function createRenderedTextImage (options: RenderedTextOptions): Image
+declare function updateRenderedTextImage (image: Image, options: RenderedTextOptions): void
+
 declare var u32_structs: Uint32Array[]
 declare var spray_size: 0x100
 declare var marked_arr_offset: number

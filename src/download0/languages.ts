@@ -20,19 +20,35 @@ export const lang: Record<string, string> = {
 }
 
 export let useImageText = false
-export let textImageBase = ''
+export const textImageBase = ''
 
-let detectedLocale = jsmaf.locale
-if (!detectedLocale) {
-  detectedLocale = 'ar'
+function normalizeLocale (locale?: string) {
+  const rawLocale = (locale || 'ar').toLowerCase().replace(/_/g, '-')
+
+  if (rawLocale.indexOf('es') === 0) return 'es'
+  if (rawLocale.indexOf('pt') === 0) return 'pt'
+  if (rawLocale.indexOf('fr') === 0) return 'fr'
+  if (rawLocale.indexOf('de') === 0) return 'de'
+  if (rawLocale.indexOf('it') === 0) return 'it'
+  if (rawLocale.indexOf('nl') === 0) return 'nl'
+  if (rawLocale.indexOf('pl') === 0) return 'pl'
+  if (rawLocale.indexOf('tr') === 0) return 'tr'
+  if (rawLocale.indexOf('ar') === 0) return 'ar'
+  if (rawLocale.indexOf('ja') === 0) return 'ja'
+  if (rawLocale.indexOf('ko') === 0) return 'ko'
+  if (rawLocale.indexOf('zh') === 0) return 'zh'
+
+  return rawLocale.split('-')[0] || 'en'
 }
 
-log('Detected locale: ' + detectedLocale)
+const rawLocale = jsmaf.locale || 'ar'
+const detectedLocale = normalizeLocale(rawLocale)
+
+log('Detected locale: ' + rawLocale + ' -> ' + detectedLocale)
 
 const IMAGE_TEXT_LOCALES = ['ar', 'de', 'ja', 'ko', 'zh']
 if (IMAGE_TEXT_LOCALES.includes(detectedLocale)) {
   useImageText = true
-  textImageBase = 'file:///../download0/img/text/' + detectedLocale + '/'
 }
 
 switch (detectedLocale) {

@@ -1,14 +1,18 @@
-import { lang, useImageText, textImageBase } from 'download0/languages'
+import { lang, useImageText } from 'download0/languages'
+import { createRenderedTextImage, shouldRenderTextAsImage } from 'download0/text_renderer'
 import { libc_addr } from 'download0/userland'
 import { fn, BigInt } from 'download0/types'
 
 (function () {
   include('languages.js')
+  if (typeof createRenderedTextImage === 'undefined') {
+    include('text_renderer.js')
+  }
   log('Loading main menu...')
 
   let currentButton = 0
   const buttons: Image[] = []
-  const buttonTexts: jsmaf.Text[] = []
+  const buttonTexts: Array<Image | jsmaf.Text> = []
   const buttonMarkers: Image[] = []
   const buttonOrigPos: { x: number, y: number }[] = []
   const textOrigPos: { x: number, y: number }[] = []
@@ -84,13 +88,16 @@ import { fn, BigInt } from 'download0/types'
     jsmaf.root.children.push(marker)
 
     let btnText: Image | jsmaf.Text
-    if (useImageText) {
-      btnText = new Image({
-        url: textImageBase + menuOptions[i]!.imgKey + '.png',
+    if (useImageText || shouldRenderTextAsImage(menuOptions[i]!.label, jsmaf.locale)) {
+      btnText = createRenderedTextImage({
+        text: menuOptions[i]!.label,
         x: btnX + 20,
         y: btnY + 15,
         width: 300,
-        height: 50
+        height: 50,
+        fontSize: 28,
+        align: 'center',
+        locale: jsmaf.locale
       })
     } else {
       btnText = new jsmaf.Text()
@@ -131,13 +138,16 @@ import { fn, BigInt } from 'download0/types'
   jsmaf.root.children.push(exitMarker)
 
   let exitText: Image | jsmaf.Text
-  if (useImageText) {
-    exitText = new Image({
-      url: textImageBase + 'exit.png',
+  if (useImageText || shouldRenderTextAsImage(lang.exit, jsmaf.locale)) {
+    exitText = createRenderedTextImage({
+      text: lang.exit,
       x: exitX + 20,
       y: exitY + 15,
       width: 300,
-      height: 50
+      height: 50,
+      fontSize: 28,
+      align: 'center',
+      locale: jsmaf.locale
     })
   } else {
     exitText = new jsmaf.Text()
@@ -160,7 +170,7 @@ import { fn, BigInt } from 'download0/types'
     return (1 - Math.cos(t * Math.PI)) / 2
   }
 
-  function animateZoomIn (btn: Image, text: jsmaf.Text, btnOrigX: number, btnOrigY: number, textOrigX: number, textOrigY: number) {
+  function animateZoomIn (btn: Image, text: Image | jsmaf.Text, btnOrigX: number, btnOrigY: number, textOrigX: number, textOrigY: number) {
     if (zoomInInterval) jsmaf.clearInterval(zoomInInterval)
     const btnW = buttonWidth
     const btnH = buttonHeight
@@ -192,7 +202,7 @@ import { fn, BigInt } from 'download0/types'
     }, step)
   }
 
-  function animateZoomOut (btn: Image, text: jsmaf.Text, btnOrigX: number, btnOrigY: number, textOrigX: number, textOrigY: number) {
+  function animateZoomOut (btn: Image, text: Image | jsmaf.Text, btnOrigX: number, btnOrigY: number, textOrigX: number, textOrigY: number) {
     if (zoomOutInterval) jsmaf.clearInterval(zoomOutInterval)
     const btnW = buttonWidth
     const btnH = buttonHeight

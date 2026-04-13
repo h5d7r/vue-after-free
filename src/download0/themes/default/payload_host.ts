@@ -1,10 +1,15 @@
 import { fn, mem, BigInt } from 'download0/types'
 import { binloader_init } from 'download0/binloader'
 import { libc_addr } from 'download0/userland'
-import { lang, useImageText, textImageBase } from 'download0/languages'
+import { lang, useImageText } from 'download0/languages'
+import { createRenderedTextImage, shouldRenderTextAsImage } from 'download0/text_renderer'
 import { checkJailbroken } from 'download0/check-jailbroken'
 
 (function () {
+  if (typeof createRenderedTextImage === 'undefined') {
+    include('text_renderer.js')
+  }
+
   if (typeof libc_addr === 'undefined') {
     log('Loading userland.js...')
     include('userland.js')
@@ -29,7 +34,7 @@ import { checkJailbroken } from 'download0/check-jailbroken'
 
   let currentButton = 0
   const buttons: Image[] = []
-  const buttonTexts: jsmaf.Text[] = []
+  const buttonTexts: Array<Image | jsmaf.Text> = []
   const buttonMarkers: Image[] = []
   const buttonOrigPos: { x: number, y: number }[] = []
   const textOrigPos: { x: number, y: number }[] = []
@@ -58,13 +63,16 @@ import { checkJailbroken } from 'download0/check-jailbroken'
   })
   jsmaf.root.children.push(logo)
 
-  if (useImageText) {
-    const title = new Image({
-      url: textImageBase + 'payloadMenu.png',
+  if (useImageText || shouldRenderTextAsImage(lang.payloadMenu, jsmaf.locale)) {
+    const title = createRenderedTextImage({
+      text: lang.payloadMenu,
       x: 830,
       y: 100,
       width: 250,
-      height: 60
+      height: 60,
+      fontSize: 32,
+      align: 'center',
+      locale: jsmaf.locale
     })
     jsmaf.root.children.push(title)
   } else {
@@ -186,11 +194,24 @@ import { checkJailbroken } from 'download0/check-jailbroken'
       displayName = displayName.substring(0, 27) + '...'
     }
 
-    const text = new jsmaf.Text()
-    text.text = displayName
-    text.x = btnX + 20
-    text.y = btnY + 30
-    text.style = 'white'
+    let text: Image | jsmaf.Text
+    if (useImageText || shouldRenderTextAsImage(displayName, jsmaf.locale)) {
+      text = createRenderedTextImage({
+        text: displayName,
+        x: btnX + 20,
+        y: btnY + 15,
+        width: buttonWidth - 70,
+        height: 50,
+        fontSize: 24,
+        locale: jsmaf.locale
+      })
+    } else {
+      text = new jsmaf.Text()
+      text.text = displayName
+      text.x = btnX + 20
+      text.y = btnY + 30
+      text.style = 'white'
+    }
     buttonTexts.push(text)
     jsmaf.root.children.push(text)
 
@@ -199,13 +220,16 @@ import { checkJailbroken } from 'download0/check-jailbroken'
   }
 
   let backHint: Image | jsmaf.Text
-  if (useImageText) {
-    backHint = new Image({
-      url: textImageBase + (jsmaf.circleIsAdvanceButton ? 'xToGoBack.png' : 'oToGoBack.png'),
+  if (useImageText || shouldRenderTextAsImage(jsmaf.circleIsAdvanceButton ? lang.xToGoBack : lang.oToGoBack, jsmaf.locale)) {
+    backHint = createRenderedTextImage({
+      text: jsmaf.circleIsAdvanceButton ? lang.xToGoBack : lang.oToGoBack,
       x: 890,
       y: 1000,
       width: 150,
-      height: 40
+      height: 40,
+      fontSize: 22,
+      align: 'center',
+      locale: jsmaf.locale
     })
   } else {
     backHint = new jsmaf.Text()
@@ -224,7 +248,7 @@ import { checkJailbroken } from 'download0/check-jailbroken'
     return (1 - Math.cos(t * Math.PI)) / 2
   }
 
-  function animateZoomIn (btn: Image, text: jsmaf.Text, btnOrigX: number, btnOrigY: number, textOrigX: number, textOrigY: number) {
+  function animateZoomIn (btn: Image, text: Image | jsmaf.Text, btnOrigX: number, btnOrigY: number, textOrigX: number, textOrigY: number) {
     if (zoomInInterval) jsmaf.clearInterval(zoomInInterval)
     const btnW = buttonWidth
     const btnH = buttonHeight
@@ -256,7 +280,7 @@ import { checkJailbroken } from 'download0/check-jailbroken'
     }, step)
   }
 
-  function animateZoomOut (btn: Image, text: jsmaf.Text, btnOrigX: number, btnOrigY: number, textOrigX: number, textOrigY: number) {
+  function animateZoomOut (btn: Image, text: Image | jsmaf.Text, btnOrigX: number, btnOrigY: number, textOrigX: number, textOrigY: number) {
     if (zoomOutInterval) jsmaf.clearInterval(zoomOutInterval)
     const btnW = buttonWidth
     const btnH = buttonHeight
