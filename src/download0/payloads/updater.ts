@@ -35,7 +35,7 @@ import { utils } from 'download0/types'
     new Style({ name: 'count', color: 'rgb(180,180,180)', size: 20 })
 
     var bg = new Image({
-      url: 'file:///assets/img/bg_blue_wave.png',
+      url: 'file:///assets/img/bg_blue_wave.webp',
       x: 0,
       y: 0,
       width: 1920,
@@ -46,7 +46,7 @@ import { utils } from 'download0/types'
     var logoWidth = 400
     var logoHeight = 225
     var logo = new Image({
-      url: 'file:///../download0/img/logo.png',
+      url: 'file:///../download0/img/logo.webp',
       x: 960 - logoWidth / 2,
       y: 150,
       width: logoWidth,
@@ -62,7 +62,7 @@ import { utils } from 'download0/types'
     jsmaf.root.children.push(titleText)
 
     progressBg = new Image({
-      url: 'file:///assets/img/button_over_9.png',
+      url: 'file:///assets/img/button_over_9.webp',
       x: barX,
       y: barY,
       width: barW,
@@ -72,7 +72,7 @@ import { utils } from 'download0/types'
     jsmaf.root.children.push(progressBg)
 
     progressFg = new Image({
-      url: 'file:///assets/img/button_over_9.png',
+      url: 'file:///assets/img/button_over_9.webp',
       x: barX,
       y: barY,
       width: 0,

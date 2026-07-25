@@ -127,8 +127,8 @@ if (typeof lang === 'undefined') {
   const textOrigPos: { x: number; y: number }[] = []
   const valueTexts: Image[] = []
 
-  const normalButtonImg = 'file:///assets/img/button_over_9.png'
-  const selectedButtonImg = 'file:///assets/img/button_over_9.png'
+  const normalButtonImg = 'file:///assets/img/button_over_9.webp'
+  const selectedButtonImg = 'file:///assets/img/button_over_9.webp'
 
   jsmaf.root.children.length = 0
 
@@ -136,7 +136,7 @@ if (typeof lang === 'undefined') {
   new Style({ name: 'title', color: 'white', size: 32 })
 
   const background = new Image({
-    url: 'file:///../download0/img/multiview_bg_VAF.png',
+    url: 'file:///../download0/img/multiview_bg_VAF.webp',
     x: 0,
     y: 0,
     width: 1920,
@@ -145,7 +145,7 @@ if (typeof lang === 'undefined') {
   jsmaf.root.children.push(background)
 
   const logo = new Image({
-    url: 'file:///../download0/img/logo.png',
+    url: 'file:///../download0/img/logo.webp',
     x: 1620,
     y: 0,
     width: 300,
@@ -155,7 +155,7 @@ if (typeof lang === 'undefined') {
 
   if (useImageText) {
     const title = new Image({
-      url: textImageBase + 'config.png',
+      url: textImageBase + 'config.webp',
       x: 860,
       y: 100,
       width: 200,
@@ -206,7 +206,7 @@ if (typeof lang === 'undefined') {
     let btnText: Image | jsmaf.Text
     if (useImageText) {
       btnText = new Image({
-        url: textImageBase + configOption.imgKey + '.png',
+        url: textImageBase + configOption.imgKey + '.webp',
         x: btnX + 20,
         y: btnY + 15,
         width: 200,
@@ -224,7 +224,7 @@ if (typeof lang === 'undefined') {
 
     if (configOption.type === 'toggle') {
       const checkmark = new Image({
-        url: currentConfig[configOption.key as keyof typeof currentConfig] ? 'file:///assets/img/check_small_on.png' : 'file:///assets/img/check_small_off.png',
+        url: currentConfig[configOption.key as keyof typeof currentConfig] ? 'file:///assets/img/check_small_on.webp' : 'file:///assets/img/check_small_off.webp',
         x: btnX + 320,
         y: btnY + 20,
         width: 40,
@@ -237,7 +237,7 @@ if (typeof lang === 'undefined') {
       if (configOption.key === 'jb_behavior') {
         if (useImageText) {
           valueLabel = new Image({
-            url: textImageBase + jbBehaviorImgKeys[currentConfig.jb_behavior] + '.png',
+            url: textImageBase + jbBehaviorImgKeys[currentConfig.jb_behavior] + '.webp',
             x: btnX + 230,
             y: btnY + 15,
             width: 150,
@@ -271,7 +271,7 @@ if (typeof lang === 'undefined') {
   let backHint: Image | jsmaf.Text
   if (useImageText) {
     backHint = new Image({
-      url: textImageBase + (jsmaf.circleIsAdvanceButton ? 'xToGoBack.png' : 'oToGoBack.png'),
+      url: textImageBase + (jsmaf.circleIsAdvanceButton ? 'xToGoBack.webp' : 'oToGoBack.webp'),
       x: centerX - 60,
       y: startY + configOptions.length * buttonSpacing + 120,
       width: 150,
@@ -413,11 +413,11 @@ if (typeof lang === 'undefined') {
     const key = options.key
     if (options.type === 'toggle') {
       const value = currentConfig[key as keyof typeof currentConfig]
-      valueText.url = value ? 'file:///assets/img/check_small_on.png' : 'file:///assets/img/check_small_off.png'
+      valueText.url = value ? 'file:///assets/img/check_small_on.webp' : 'file:///assets/img/check_small_off.webp'
     } else {
       if (key === 'jb_behavior') {
         if (useImageText) {
-          (valueText as Image).url = textImageBase + jbBehaviorImgKeys[currentConfig.jb_behavior] + '.png'
+          (valueText as Image).url = textImageBase + jbBehaviorImgKeys[currentConfig.jb_behavior] + '.webp'
         } else {
           (valueText as jsmaf.Text).text = jbBehaviorLabels[currentConfig.jb_behavior] || jbBehaviorLabels[0]
         }

@@ -941,7 +941,7 @@ function setup_log_screen () {
   jsmaf.root.children.length = 0
 
   const bg = new Image({
-    url: 'file:///../download0/img/multiview_bg_VAF.png',
+    url: 'file:///../download0/img/multiview_bg_VAF.webp',
     x: 0,
     y: 0,
     width: 1920,

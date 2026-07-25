@@ -37,11 +37,11 @@ import { checkJailbroken } from 'download0/check-jailbroken'
   type FileEntry = { name: string, path: string }
   const fileList: FileEntry[] = []
 
-  const normalButtonImg = 'file:///assets/img/button_over_9.png'
-  const selectedButtonImg = 'file:///assets/img/button_over_9.png'
+  const normalButtonImg = 'file:///assets/img/button_over_9.webp'
+  const selectedButtonImg = 'file:///assets/img/button_over_9.webp'
 
   const background = new Image({
-    url: 'file:///../download0/img/multiview_bg_VAF.png',
+    url: 'file:///../download0/img/multiview_bg_VAF.webp',
     x: 0,
     y: 0,
     width: 1920,
@@ -50,7 +50,7 @@ import { checkJailbroken } from 'download0/check-jailbroken'
   jsmaf.root.children.push(background)
 
   const logo = new Image({
-    url: 'file:///../download0/img/logo.png',
+    url: 'file:///../download0/img/logo.webp',
     x: 1620,
     y: 0,
     width: 300,
@@ -60,7 +60,7 @@ import { checkJailbroken } from 'download0/check-jailbroken'
 
   if (useImageText) {
     const title = new Image({
-      url: textImageBase + 'payloadMenu.png',
+      url: textImageBase + 'payloadMenu.webp',
       x: 830,
       y: 100,
       width: 250,
@@ -172,7 +172,7 @@ import { checkJailbroken } from 'download0/check-jailbroken'
     jsmaf.root.children.push(button)
 
     const marker = new Image({
-      url: 'file:///assets/img/ad_pod_marker.png',
+      url: 'file:///assets/img/ad_pod_marker.webp',
       x: btnX + buttonWidth - 50,
       y: btnY + 35,
       width: 12,
@@ -201,7 +201,7 @@ import { checkJailbroken } from 'download0/check-jailbroken'
   let backHint: Image | jsmaf.Text
   if (useImageText) {
     backHint = new Image({
-      url: textImageBase + (jsmaf.circleIsAdvanceButton ? 'xToGoBack.png' : 'oToGoBack.png'),
+      url: textImageBase + (jsmaf.circleIsAdvanceButton ? 'xToGoBack.webp' : 'oToGoBack.webp'),
       x: 890,
       y: 1000,
       width: 150,

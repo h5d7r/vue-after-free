@@ -13,8 +13,8 @@ import { fn, BigInt } from 'download0/types'
   const buttonOrigPos: { x: number, y: number }[] = []
   const textOrigPos: { x: number, y: number }[] = []
 
-  const normalButtonImg = 'file:///assets/img/button_over_9.png'
-  const selectedButtonImg = 'file:///assets/img/button_over_9.png'
+  const normalButtonImg = 'file:///assets/img/button_over_9.webp'
+  const selectedButtonImg = 'file:///assets/img/button_over_9.webp'
 
   jsmaf.root.children.length = 0
 
@@ -26,7 +26,7 @@ import { fn, BigInt } from 'download0/types'
   }
 
   const background = new Image({
-    url: 'file:///../download0/img/multiview_bg_VAF.png',
+    url: 'file:///../download0/img/multiview_bg_VAF.webp',
     x: 0,
     y: 0,
     width: 1920,
@@ -39,7 +39,7 @@ import { fn, BigInt } from 'download0/types'
   const logoHeight = 338
 
   const logo = new Image({
-    url: 'file:///../download0/img/logo.png',
+    url: 'file:///../download0/img/logo.webp',
     x: centerX - logoWidth / 2,
     y: 50,
     width: logoWidth,
@@ -73,7 +73,7 @@ import { fn, BigInt } from 'download0/types'
     jsmaf.root.children.push(button)
 
     const marker = new Image({
-      url: 'file:///assets/img/ad_pod_marker.png',
+      url: 'file:///assets/img/ad_pod_marker.webp',
       x: btnX + buttonWidth - 50,
       y: btnY + 35,
       width: 12,
@@ -86,7 +86,7 @@ import { fn, BigInt } from 'download0/types'
     let btnText: Image | jsmaf.Text
     if (useImageText) {
       btnText = new Image({
-        url: textImageBase + menuOptions[i]!.imgKey + '.png',
+        url: textImageBase + menuOptions[i]!.imgKey + '.webp',
         x: btnX + 20,
         y: btnY + 15,
         width: 300,
@@ -120,7 +120,7 @@ import { fn, BigInt } from 'download0/types'
   jsmaf.root.children.push(exitButton)
 
   const exitMarker = new Image({
-    url: 'file:///assets/img/ad_pod_marker.png',
+    url: 'file:///assets/img/ad_pod_marker.webp',
     x: exitX + buttonWidth - 50,
     y: exitY + 35,
     width: 12,
@@ -133,7 +133,7 @@ import { fn, BigInt } from 'download0/types'
   let exitText: Image | jsmaf.Text
   if (useImageText) {
     exitText = new Image({
-      url: textImageBase + 'exit.png',
+      url: textImageBase + 'exit.webp',
       x: exitX + 20,
       y: exitY + 15,
       width: 300,
